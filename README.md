@@ -1,6 +1,12 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Don't look at me yet. I'm a mess
 
-## Getting Started
+> There are many storypoint apps out there, but this one is mine.
+
+This was built as an experiment in sockets. It operates like a peer-to-peer service where the host
+manages the data and signals the other users with updates.
+
+
+## Development
 
 First, run the development server:
 
