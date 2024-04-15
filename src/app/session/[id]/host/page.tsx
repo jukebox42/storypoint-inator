@@ -1,11 +1,11 @@
 "use client"
-import { SessionProvider } from "#/context/SessionContext";
+import { HostProvider } from "#/context/HostContext";
 import { HostView } from "#/ui/HostView";
 
 export default function Page({ params: { id }}: { params: { id: string} }) {
   return (
-    <SessionProvider sessionId={id}>
+    <HostProvider sessionId={id}>
       <HostView />
-    </SessionProvider>
+    </HostProvider>
   );
 }

@@ -2,12 +2,12 @@
 import { Button, Divider, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
-import { useSession } from "#/context/SessionContext"
+import { useHost } from "#/context/HostContext"
 import { UserList } from "#/ui/UserList";
 import { JoinLink } from "#/ui/JoinLink";
 
 export const HostView = () => {
-  const { sessionId, users, votes, stopVoting, resetVoting, endSession, isReview } = useSession();
+  const { sessionId, users, votes, stopVoting, resetVoting, endSession, isReview } = useHost();
   return (
     <Grid container spacing={3}>
       <Grid xs={12}>
