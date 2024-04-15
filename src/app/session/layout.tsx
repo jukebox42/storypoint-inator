@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Typography>
           <IconButton
             aria-label="Github"
-            href="github.com"
+            href="https://github.com/jukebox42/storypoint-inator"
             target="_blank"
             color="inherit"
             size="large"
