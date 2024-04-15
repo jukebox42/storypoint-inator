@@ -1,5 +1,6 @@
 "use server"
 import Pusher from "pusher";
+import { v4 as uuidv4 } from "uuid";
 
 import { Actions, User, Votes } from ".";
 
@@ -12,7 +13,7 @@ const pusher = new Pusher({
 });
 
 export const create = async () => {
-  return crypto.randomUUID();
+  return uuidv4();
 }
 
 export const joined = async (id: string, success: boolean, user?: User, users?: User[], votes?: Votes, isReview?: boolean) => {

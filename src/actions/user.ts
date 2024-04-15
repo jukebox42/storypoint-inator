@@ -1,5 +1,6 @@
 "use server"
 import Pusher from "pusher";
+import { v4 as uuidv4 } from "uuid";
 import { Actions, options } from ".";
 
 const pusher = new Pusher({
@@ -11,7 +12,7 @@ const pusher = new Pusher({
 });
 
 export const join = async (id: string, name: string, isObserver = false) => {
-  const userId = crypto.randomUUID();
+  const userId = uuidv4();
   pusher.trigger(id, Actions.USER_JOIN, { id: userId, name, isObserver });
   return userId;
 }
