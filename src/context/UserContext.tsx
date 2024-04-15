@@ -92,7 +92,7 @@ export const UserProvider = ({ sessionId, children }: Props) => {
         setIsReview(false);
       })
       .bind(Actions.HOST_END_SESSION, () => {
-        router.push("/end");
+        router.push("/exit");
       });
    return intChannel;
   }, []);

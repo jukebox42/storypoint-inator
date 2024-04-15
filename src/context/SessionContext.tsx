@@ -99,7 +99,7 @@ export const SessionProvider = ({ sessionId, children }: Props) => {
 
   const endSession = () => {
     hostActions.end(sessionId);
-    router.push("/end");
+    router.push("/exit");
   }
 
   const value = {

@@ -1,3 +1,4 @@
+"use client"
 import { AppBar, Box, Container, IconButton, Toolbar, Typography } from "@mui/material";
 import GitHubIcon from '@mui/icons-material/GitHub';
 
