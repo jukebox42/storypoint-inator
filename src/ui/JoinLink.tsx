@@ -7,7 +7,7 @@ type Props = {
 }
 
 export const JoinLink = ({ sessionId }: Props) => {
-  const joinUrl = `localhost:3000/session/${sessionId}`;
+  const joinUrl = `https://storypoint-inator.vercel.app/session/${sessionId}`;
 
   const handleCopy = () => navigator.clipboard.writeText(joinUrl);
 
