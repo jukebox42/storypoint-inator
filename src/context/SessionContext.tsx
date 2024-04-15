@@ -1,7 +1,7 @@
 "use client"
 
-import { hostActions } from "#/app/actions";
-import { Actions, User, options } from "#/app/actions/constants";
+import { hostActions } from "#/actions";
+import { Actions, User, options } from "#/actions/constants";
 import { useRouter } from "next/navigation";
 import Pusher, { Channel } from "pusher-js";
 import React, { useEffect, useMemo, useState } from "react";
@@ -40,8 +40,6 @@ export const SessionProvider = ({ sessionId, children }: Props) => {
   const [isReview, setIsReview] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [votes, setVotes] = useState<Votes>({});
-
-  console.log("P", process.env);
 
   const channel = useMemo(() => {
     Pusher.logToConsole = true;

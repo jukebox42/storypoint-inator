@@ -1,5 +1,5 @@
 "use client"
-import { User, Votes, options } from "#/app/actions"
+import { User, Votes, options } from "#/actions"
 import { Box, Divider, Stack, Typography } from "@mui/material"
 import SquareIcon from '@mui/icons-material/Square';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';

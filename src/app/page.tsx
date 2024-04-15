@@ -1,7 +1,6 @@
 "use client"
-
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { hostActions } from "./actions";
+import { hostActions } from "#/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

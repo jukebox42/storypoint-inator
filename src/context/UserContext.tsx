@@ -1,10 +1,10 @@
 "use client"
 
-import { userActions } from "#/app/actions";
-import { Actions, User } from "#/app/actions/constants";
+import { userActions } from "#/actions";
+import { Actions, User } from "#/actions/constants";
 import { useRouter } from "next/navigation";
 import Pusher, { Channel } from "pusher-js";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useBeforeunload } from "react-beforeunload";
 
 type Votes = { [key: string]: string };

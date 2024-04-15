@@ -2,7 +2,7 @@
 import { PointCards } from "#/ui/PointCards";
 import { Alert, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { options, userActions } from "#/app/actions";
+import { options, userActions } from "#/actions";
 import { useUser } from "#/context/UserContext";
 import { UserList } from "../UserList";
 import { JoinLink } from "../JoinLink";
