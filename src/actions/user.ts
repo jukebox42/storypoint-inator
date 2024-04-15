@@ -9,7 +9,7 @@ const createPusher = () => {
     key: process.env.PUSHER_APP_KEY as string,
     secret: process.env.PUSHER_APP_SECRET as string,
     cluster: process.env.PUSHER_APP_CLUSTER as string,
-    encrypted: true
+    useTLS: true
   });
   return pusher;
 }
