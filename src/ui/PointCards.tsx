@@ -2,7 +2,7 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 import { PointCard } from "./PointCard";
-import { Divider, Typography } from "@mui/material";
+import { Alert, Divider, Typography } from "@mui/material";
 
 type Props = {
   options: string[];
@@ -27,5 +27,6 @@ export const PointCards = ({ options, onClick, activeOption, isDisabled }: Props
         </Grid>
       ))}
     </Grid>
+    {isDisabled && <Alert color="info" sx={{ mt: 2 }}>Voting locked, storypoints are in review.</Alert>}
   </>
 );

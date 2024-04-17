@@ -6,12 +6,18 @@ import { useEffect, useState } from "react";
 
 export const JoinPhase = () => {
   const [name, setName] = useState("");
+  const [clientError, setClientError] = useState("")
   const [isJoining, setIsJoining] = useState(false);
   const { sessionId, errors } = useUser();
 
   const handleJoin = async () => {
+    setClientError("");
     setIsJoining(true);
     userActions.join(sessionId, name);
+    setTimeout(() => {
+      setIsJoining(false);
+      setClientError("Join timeout. Try again.");
+    }, 5000);
   }
 
   useEffect(() => {
@@ -23,6 +29,7 @@ export const JoinPhase = () => {
   return (
     <>
       {errors.join && <Alert color="error">{errors.join}</Alert>}
+      {!!clientError && <Alert color="error">{clientError}</Alert>}
       <Box sx={{ display: "flex", gap: 3, flexDirection: "row",}}>
         <TextField
           label="Name"

@@ -37,24 +37,27 @@ export const HostProvider = ({ sessionId, children }: Props) => {
 
   const userJoin = (newUser: User) => {
     if (users.find(u => u.name === newUser.name)) {
-      return hostActions.joined(sessionId, false);
+      return hostActions.joined(sessionId, { success: false, error: "name already in use" });
     }
     
     setUsers(prev => {
       if (prev.find(u => u.id === newUser.id)) {
         return prev;
       }
-      return [...prev, newUser]
+      return [...prev, newUser];
     });
-    hostActions.joined(sessionId, true, newUser, users, votes, isReview);
+    hostActions.joined(sessionId, { success: true, user: newUser, users, votes, isReview });
   };
 
   const userVote = (data: { userId: string, value: string }) => {
-    if (isReview || !data.userId || !options.find(o => o === data.value)) {
-      return hostActions.voted(sessionId, false);
+    if (isReview) {
+      return hostActions.voted(sessionId, { success: false, error: "Cannot vote during reviews" });
+    }
+    if (!data.userId || !options.find(o => o === data.value)) {
+      return hostActions.voted(sessionId, { success: false, error: "Invalid value" });
     }
     setVotes(prev => ({ ...prev, [data.userId]: data.value }));
-    hostActions.voted(sessionId, true, data.value);
+    hostActions.voted(sessionId, { success: true, value: data.value });
   }
 
   const userLeave = (data: { userId: string }) => {

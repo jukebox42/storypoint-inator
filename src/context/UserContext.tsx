@@ -40,9 +40,13 @@ export const UserProvider = ({ sessionId, children }: Props) => {
   const [votes, setVotes] = useState<{}>({});
   const [myVote, setMyVote] = useState<string>("");
 
-  const hostJoined = (data: { success: boolean, user?: User, users: User[], votes: Votes, isReview: boolean }) => {
+  const hostJoined = (data: { success: boolean, user?: User, users: User[], votes: Votes, isReview: boolean, error: string }) => {
     if (!data.success || !data.user) {
-      return setErrors(prev => ({...prev, join: "Failed to join" }));
+      return setErrors(prev => ({...prev, join: data.error ?? "Failed to join." }));
+    }
+    // If we already have a user then ignore this event.
+    if (user) {
+      return;
     }
     setErrors(prev => ({ ...prev, join: undefined }));
     setVotes(data.votes ?? {});
@@ -54,9 +58,9 @@ export const UserProvider = ({ sessionId, children }: Props) => {
     setUsers(users);
   };
 
-  const hostVoted = (data: { success: boolean, value?: string}) => {
+  const hostVoted = (data: { success: boolean, value?: string, error?: string }) => {
     if (!data.success || !data.value) {
-      return setErrors(prev => ({...prev, vote: "Failed to vote"}));
+      return setErrors(prev => ({...prev, vote: data.error ?? "Failed to vote."}));
     }
     setErrors(prev => ({ ...prev, vote: undefined }));
     setMyVote(data.value);

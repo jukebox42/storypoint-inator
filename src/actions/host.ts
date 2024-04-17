@@ -19,9 +19,12 @@ export const create = () => {
   return uuidv4();
 }
 
-export const joined = (id: string, success: boolean, user?: User, users?: User[], votes?: Votes, isReview?: boolean) => {
+export const joined = (
+  id: string,
+  { success, user, users, votes, isReview, error }: { success: boolean, user?: User, users?: User[], votes?: Votes, isReview?: boolean, error?: string }
+) => {
   const pusher = createPusher();
-  pusher.trigger(id, Actions.HOST_JOINED, { success, user, users, votes, isReview });
+  pusher.trigger(id, Actions.HOST_JOINED, { success, user, users, votes, isReview, error });
 }
 
 export const sendUsers = (id: string, users: User[]) => {
@@ -34,9 +37,9 @@ export const check = (id: string) => {
   pusher.trigger(id, Actions.HOST_CHECK, null);
 }
 
-export const voted = (id: string, success: boolean, value?: string) => {
+export const voted = (id: string, {success, value, error }: { success: boolean, value?: string, error?: string }) => {
   const pusher = createPusher();
-  pusher.trigger(id, Actions.HOST_VOTED, { success, value });
+  pusher.trigger(id, Actions.HOST_VOTED, { success, value, error });
 }
 
 export const stopVoting = (id: string, votes: Votes) => {
