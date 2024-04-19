@@ -2,7 +2,8 @@
 import Pusher from "pusher";
 import { v4 as uuidv4 } from "uuid";
 
-import { Actions, User, Votes } from ".";
+import { Actions, Votes } from ".";
+import { JoinedData, SendUsersData, VotedData } from "./types";
 
 const createPusher = () => {
   const pusher = new Pusher({
@@ -19,27 +20,19 @@ export const create = () => {
   return uuidv4();
 }
 
-export const joined = (
-  id: string,
-  { success, user, users, votes, isReview, error }: { success: boolean, user?: User, users?: User[], votes?: Votes, isReview?: boolean, error?: string }
-) => {
+export const joined = (id: string, data: JoinedData) => {
   const pusher = createPusher();
-  pusher.trigger(id, Actions.HOST_JOINED, { success, user, users, votes, isReview, error });
+  pusher.trigger(id, Actions.HOST_JOINED, data);
 }
 
-export const sendUsers = (id: string, users: User[]) => {
+export const sendUsers = (id: string, { users }: SendUsersData ) => {
   const pusher = createPusher();
   pusher.trigger(id, Actions.HOST_USERS, users);
 }
 
-export const check = (id: string) => {
+export const voted = (id: string, data: VotedData) => {
   const pusher = createPusher();
-  pusher.trigger(id, Actions.HOST_CHECK, null);
-}
-
-export const voted = (id: string, {success, value, error }: { success: boolean, value?: string, error?: string }) => {
-  const pusher = createPusher();
-  pusher.trigger(id, Actions.HOST_VOTED, { success, value, error });
+  pusher.trigger(id, Actions.HOST_VOTED, data);
 }
 
 export const stopVoting = (id: string, votes: Votes) => {

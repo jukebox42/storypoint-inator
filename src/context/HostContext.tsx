@@ -1,5 +1,4 @@
 "use client"
-
 import { hostActions } from "#/actions";
 import { Actions, User, Votes, options } from "#/actions/constants";
 import { useRouter } from "next/navigation";
@@ -37,7 +36,7 @@ export const HostProvider = ({ sessionId, children }: Props) => {
 
   const userJoin = (newUser: User) => {
     if (users.find(u => u.name === newUser.name)) {
-      return hostActions.joined(sessionId, { success: false, error: "name already in use" });
+      return hostActions.joined(sessionId, { success: false, userId: newUser.id, error: "name already in use" });
     }
     
     setUsers(prev => {
@@ -46,18 +45,18 @@ export const HostProvider = ({ sessionId, children }: Props) => {
       }
       return [...prev, newUser];
     });
-    hostActions.joined(sessionId, { success: true, user: newUser, users, votes, isReview });
+    hostActions.joined(sessionId, { success: true, userId: newUser.id, user: newUser, users, votes, isReview });
   };
 
   const userVote = (data: { userId: string, value: string }) => {
     if (isReview) {
-      return hostActions.voted(sessionId, { success: false, error: "Cannot vote during reviews" });
+      return hostActions.voted(sessionId, { success: false, userId: data.userId, error: "Cannot vote during reviews" });
     }
     if (!data.userId || !options.find(o => o === data.value)) {
-      return hostActions.voted(sessionId, { success: false, error: "Invalid value" });
+      return hostActions.voted(sessionId, { success: false, userId: data.userId, error: "Invalid value" });
     }
     setVotes(prev => ({ ...prev, [data.userId]: data.value }));
-    hostActions.voted(sessionId, { success: true, value: data.value });
+    hostActions.voted(sessionId, { success: true, userId: data.userId, value: data.value });
   }
 
   const userLeave = (data: { userId: string }) => {
@@ -77,7 +76,7 @@ export const HostProvider = ({ sessionId, children }: Props) => {
   useBeforeunload(() => endSession());
 
   useEffect(() => {
-    hostActions.sendUsers(sessionId, users);
+    hostActions.sendUsers(sessionId, { users });
   }, [users]);
 
   const resetVoting = () => {

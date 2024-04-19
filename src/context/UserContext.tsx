@@ -1,16 +1,17 @@
 "use client"
+import { useRouter } from "next/navigation";
+import { Channel } from "pusher-js";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useBeforeunload } from "react-beforeunload";
 
 import { userActions } from "#/actions";
 import { Actions, User, Votes } from "#/actions/constants";
-import { useRouter } from "next/navigation";
-import { Channel } from "pusher-js";
-import React, { useMemo, useState } from "react";
-import { useBeforeunload } from "react-beforeunload";
 import { createClientPusher } from "./utils";
+import { JoinedData, VotedData } from "#/actions/types";
 
 export type Errors = {
-  join?: string,
-  vote?: string,
+  join?: string;
+  vote?: string;
 }
 
 type ContextProps = {
@@ -22,17 +23,20 @@ type ContextProps = {
   myVote: string;
   isReview: boolean;
   channel?: Channel;
+
+  joinSession: (name: string) => void;
 }
 
 const UserContext = React.createContext<ContextProps>({} as any);
 
 type Props = {
-  sessionId: string,
-  children: React.ReactNode,
+  sessionId: string;
+  children: React.ReactNode;
 }
 
 export const UserProvider = ({ sessionId, children }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
+  const idRef = useRef(""); // using a ref because it's checked in callbacks
   const [isReview, setIsReview] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [user, setUser] = useState<User | undefined>();
@@ -40,26 +44,35 @@ export const UserProvider = ({ sessionId, children }: Props) => {
   const [votes, setVotes] = useState<{}>({});
   const [myVote, setMyVote] = useState<string>("");
 
-  const hostJoined = (data: { success: boolean, user?: User, users: User[], votes: Votes, isReview: boolean, error: string }) => {
-    if (!data.success || !data.user) {
-      return setErrors(prev => ({...prev, join: data.error ?? "Failed to join." }));
-    }
-    // If we already have a user then ignore this event.
-    if (user) {
+  const joinSession = async (name: string) =>
+    idRef.current = await userActions.join(sessionId, name);
+
+  const hostJoined = (data: JoinedData) => {
+    if (idRef.current === "" || data.userId !== idRef.current) {
       return;
     }
+
+    if (!data.success) {
+      idRef.current = "";
+      return setErrors(prev => ({...prev, join: data.error ?? "Failed to join." }));
+    }
+
     setErrors(prev => ({ ...prev, join: undefined }));
-    setVotes(data.votes ?? {});
-    setIsReview(isReview);
+    setVotes(data.votes);
+    setIsReview(data.isReview);
     setUser(data.user);
+    setUsers(data.users);
   };
 
   const hostUsers = (users: User[]) => {
     setUsers(users);
   };
 
-  const hostVoted = (data: { success: boolean, value?: string, error?: string }) => {
-    if (!data.success || !data.value) {
+  const hostVoted = (data: VotedData) => {
+    if (data.userId !== idRef.current) {
+      return;
+    }
+    if (!data.success) {
       return setErrors(prev => ({...prev, vote: data.error ?? "Failed to vote."}));
     }
     setErrors(prev => ({ ...prev, vote: undefined }));
@@ -110,6 +123,8 @@ export const UserProvider = ({ sessionId, children }: Props) => {
     myVote,
     isReview,
     channel,
+
+    joinSession,
   }
 
   return (
